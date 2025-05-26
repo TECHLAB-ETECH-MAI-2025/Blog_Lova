@@ -1,0 +1,56 @@
+<link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.min.css') }}">
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh; background-color: #f8f9fa;">
+    <div class="card shadow-lg p-4 border-0" style="max-width: 400px; width: 100%; border-radius: 1rem;">
+        <div class="text-center mb-4">
+            <img src="https://cdn-icons-png.flaticon.com/512/3064/3064197.png" alt="Login Icon" width="70" class="mb-2">
+            <h3 class="fw-bold">Bienvenue</h3>
+            <p class="text-muted">Connectez-vous pour continuer</p>
+        </div>
+
+        {% if error %}
+            <div class="alert alert-danger" id="login-error">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
+
+        <form action="{{ path('app_login') }}" method="post" id="login-form">
+            <div class="mb-3">
+                <label for="username" class="form-label">Adresse e-mail</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="_username" 
+                    class="form-control rounded-pill px-4 py-2" 
+                    value="{{ last_username }}" 
+                    required 
+                    autofocus
+                >
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Mot de passe</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="_password" 
+                    class="form-control rounded-pill px-4 py-2" 
+                    required
+                >
+            </div>
+
+            <div class="d-grid mb-3">
+                <button type="submit" class="btn btn-primary rounded-pill py-2">Se connecter</button>
+            </div>
+
+            <div class="text-center">
+                <p class="text-muted">ou</p>
+            </div>
+            <div class="text-center mt-3">
+                <a href="{{ path('app_register') }}" class="btn btn-outline-primary btn-sm rounded-pill px-4">
+                      Créer un nouveau compte
+                </a>
+            </div>
+
+        </form>
+    </div>
+</div>

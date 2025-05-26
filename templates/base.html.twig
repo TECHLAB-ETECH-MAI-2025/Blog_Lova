@@ -1,19 +1,106 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Mon Blog{% endblock %}</title>
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+    <!-- Intégration de Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.min.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'><text y='1.2em' font-size='96'>⚫️</text></svg>">
+
+    <style>
+      .brand-title {
+        font-family: 'Times New Roman', serif;
+        font-weight: bold;
+        font-size: 1.5rem;
+        text-transform: uppercase;
+      }
+
+      .logout-button {
+        background-color: #dc3545;
+        color: white !important;
+        padding: 6px 12px;
+        border-radius: 20px;
+        transition: all 0.3s ease-in-out;
+        border: 1px solid #dc3545;
+        font-weight: 500;
+      }
+
+      .logout-button:hover {
+        background-color: #bb2d3b;
+        color: #fff !important;
+        text-decoration: none;
+      }
+       a.nav-link:active {
+          outline: 2px solid white;
+          border-radius: 6px;
+       }
+    </style>
+
+    {% block stylesheets %}
+      {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+
+  </head>
+  <body class="bg-light text-dark">
+
+    <!-- Barre de navigation améliorée -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-4">
+      <div class="container">
+        <a class="navbar-brand brand-title" href="/">Blog Lova</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+          data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
+          aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            {% if app.user %}
+              <li class="nav-item">
+                <a class="nav-link" href="/article/">Articles</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/categorie/">Catégories</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/commentaire/">Commentaires</a>
+              </li>
+            {% endif %}
+          </ul>
+
+          <ul class="navbar-nav ms-auto">
+            {% if app.user %}
+              <li class="nav-item">
+                <span class="navbar-text me-2 text-white">
+                   {{ app.user.email }}
+                </span>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link logout-button" href="{{ path('app_logout') }}">Déconnexion</a>
+              </li>
+            {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <main class="container">
+      {% block body %}
+      <!-- Contenu dynamique ici -->
+      {% endblock %}
+    </main>
+
+    <!-- Scripts JavaScript -->
+    <script src="{{ asset('bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    {% block javascripts %}
+      {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+  </body>
 </html>

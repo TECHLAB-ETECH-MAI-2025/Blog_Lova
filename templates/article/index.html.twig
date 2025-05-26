@@ -1,37 +1,62 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Article index{% endblock %}
+{% block title %}Liste des articles{% endblock %}
 
 {% block body %}
-    <h1>Article index</h1>
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">Articles</h1>
+    </div>
 
-    <table class="table">
-        <thead>
+    <table id="article-table" class="table table-hover table-bordered" >
+        <thead class="table-dark">
             <tr>
-                <th>Id</th>
-                <th>Titre</th>
-                <th>Contenu</th>
-                <th>actions</th>
+                <th scope="col">ID</th>
+                <th scope="col">Titre</th>
+                <th scope="col">Contenu</th>
+                <th scope="col">Auteur</th>
+                <th scope="col">Date</th>
+                <th scope="col">Likes</th>
+                <th scope="col">Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for article in articles %}
             <tr>
-                <td>{{ article.id }}</td>
+                <th scope="row">{{ article.id }}</th>
                 <td>{{ article.titre }}</td>
-                <td>{{ article.contenu }}</td>
+                <td>{{ article.contenu|slice(0, 100) ~ '...' }}</td>
+                <td>{{ article.auteur ? article.auteur.nom : 'Inconnu' }}</td>
+                <td>{{ article.createdAt ? article.createdAt|date('Y-m-d H:i') : '' }}</td>
+                 <td>
+                      <button class="btn-like btn btn-sm {{ app.user and article.likes|filter(like => like.user == app.user)|length > 0 ? 'btn-danger' : 'btn-outline-danger' }}" 
+                           data-article-id="{{ article.id }}">
+                          ❤️<span class="likes-count">{{ article.likes|length }}</span>
+                     </button> 
+                </td>
                 <td>
-                    <a href="{{ path('app_article_show', {'id': article.id}) }}">show</a>
-                    <a href="{{ path('app_article_edit', {'id': article.id}) }}">edit</a>
+                    <a href="{{ path('app_article_show', {'id': article.id}) }}" class="btn btn-sm btn-outline-info">Voir</a>
+                    <a href="{{ path('app_article_edit', {'id': article.id}) }}" class="btn btn-sm btn-outline-warning">Modifier</a>
+                
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="4">no records found</td>
+                <td colspan="6" class="text-center text-muted">Aucun article trouvé.</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_article_new') }}">Create new</a>
+    <div class="mt-4">
+        <a href="{{ path('app_article_new') }}" class="btn btn-success">
+            ➕ Nouvel article
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('article_list') }}
 {% endblock %}

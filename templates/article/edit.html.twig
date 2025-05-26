@@ -1,13 +1,53 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Article{% endblock %}
+{% block title %}Modifier l’article{% endblock %}
 
 {% block body %}
-    <h1>Edit Article</h1>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white text-center rounded-top">
+                    <h3 class="mb-0">Modifier l’article</h3>
+                </div>
 
-    {{ include('article/_form.html.twig', {'button_label': 'Update'}) }}
+                <div class="card-body p-4">
+                    {# Formulaire stylisé avec Bootstrap : à placer dans article/_form.html.twig #}
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 
-    <a href="{{ path('app_article_index') }}">back to list</a>
+                    {# Titre #}
+                    <div class="mb-3">
+                        {{ form_label(form.titre, 'Titre de l’article', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                        {{ form_widget(form.titre, {'attr': {'class': 'form-control', 'placeholder': 'Titre'}}) }}
+                        {{ form_errors(form.titre) }}
+                    </div>
 
-    {{ include('article/_delete_form.html.twig') }}
+                    {# Contenu #}
+                    <div class="mb-3">
+                        {{ form_label(form.contenu, 'Contenu', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                        {{ form_widget(form.contenu, {'attr': {'class': 'form-control', 'rows': 6, 'placeholder': 'Contenu de l’article'}}) }}
+                        {{ form_errors(form.contenu) }}
+                    </div>
+
+                    {# Bouton de soumission #}
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success px-5">
+                            {{ button_label|default('Enregistrer') }}
+                        </button>
+                    </div>
+
+                    {{ form_end(form) }}
+                </div>
+
+                <div class="card-footer bg-light d-flex justify-content-between align-items-center rounded-bottom">
+                    <a href="{{ path('app_article_index') }}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Retour à la liste
+                    </a>
+
+                    {{ include('article/_delete_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

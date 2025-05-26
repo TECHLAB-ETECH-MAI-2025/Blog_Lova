@@ -30,6 +30,14 @@ class CommentaireController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Récupérer l'utilisateur connecté et le définir comme auteur
+            $user = $this->getUser();
+            if ($user === null) {
+                // Gestion si utilisateur non connecté (ex: redirection ou exception)
+                throw $this->createAccessDeniedException('Vous devez être connecté pour commenter.');
+            }
+            $commentaire->setAuteur($user);
+
             $entityManager->persist($commentaire);
             $entityManager->flush();
 
@@ -57,6 +65,7 @@ class CommentaireController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // L'auteur ne doit pas être modifié dans le formulaire
             $entityManager->flush();
 
             return $this->redirectToRoute('app_commentaire_index', [], Response::HTTP_SEE_OTHER);

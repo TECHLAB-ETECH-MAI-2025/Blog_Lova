@@ -1,0 +1,9 @@
+{# templates/article/_actions.html.twig #}
+
+<a href="{{ path('app_article_show', {'id': article.id}) }}" class="btn btn-sm btn-outline-info">Voir</a>
+<a href="{{ path('app_article_edit', {'id': article.id}) }}" class="btn btn-sm btn-outline-warning">Modifier</a>
+
+<form method="post" action="{{ path('app_article_delete', {'id': article.id}) }}" style="display:inline" onsubmit="return confirm('Voulez-vous vraiment supprimer cet article ?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
+    <button type="submit" class="btn btn-sm btn-outline-danger">Supprimer</button>
+</form>

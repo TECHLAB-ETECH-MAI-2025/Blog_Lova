@@ -1,4 +1,22 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Remplir le formulaire</h5>
+        </div>
+        <div class="card-body">
+            {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
+
+                {{ form_errors(form) }}
+
+                <div class="mb-3">
+                    {{ form_widget(form, {'attr': {'class': 'form-control'}}) }}
+                </div>
+
+                <button type="submit" class="btn btn-success">
+                     {{ button_label|default('Enregistrer') }}
+                </button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+

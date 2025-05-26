@@ -1,11 +1,62 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Commentaire{% endblock %}
+{% block title %}Ajouter un commentaire{% endblock %}
 
 {% block body %}
-    <h1>Create new Commentaire</h1>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
 
-    {{ include('commentaire/_form.html.twig') }}
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary bg-gradient text-white text-center py-3 rounded-top">
+                    <h3 class="mb-0">Ajouter un commentaire</h3>
+                </div>
 
-    <a href="{{ path('app_commentaire_index') }}">back to list</a>
+                <div class="card-body p-4">
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+                    {# Champ Article #}
+                    <div class="mb-3">
+                        {{ form_label(form.Article, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                        {{ form_widget(form.Article, {'attr': {'class': 'form-select'}}) }}
+                        {{ form_errors(form.Article) }}
+                    </div>
+
+                    {# Auteur #}
+                    {% if form.auteur is defined %}
+                    <div class="mb-3">
+                        {{ form_label(form.auteur, 'Auteur', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                        {{ form_widget(form.auteur, {'attr': {'class': 'form-control', 'placeholder': 'Nom de l\'auteur'}}) }}
+                        {{ form_errors(form.auteur) }}
+                    </div>
+                    {% endif %}
+
+                    {# Champ contenu #}
+                    {% if form.contenu is defined %}
+                    <div class="mb-3">
+                        {{ form_label(form.contenu, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                        {{ form_widget(form.contenu, {'attr': {'class': 'form-control', 'rows': 5, 'placeholder': 'Écrivez votre commentaire...'}}) }}
+                        {{ form_errors(form.contenu) }}
+                    </div>
+                    {% endif %}
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-success px-5">
+                            {{ button_label|default('Enregistrer') }}
+                        </button>
+                    </div>
+
+                    {{ form_end(form) }}
+                </div>
+
+                <div class="card-footer text-center bg-light py-3 rounded-bottom">
+                    <a href="{{ path('app_commentaire_index') }}" class="btn btn-outline-primary">
+                        ← Retour à la liste des commentaires
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
 {% endblock %}

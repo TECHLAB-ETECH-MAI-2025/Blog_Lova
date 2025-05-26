@@ -1,11 +1,42 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Categorie{% endblock %}
+{% block title %}Créer une nouvelle catégorie{% endblock %}
 
 {% block body %}
-    <h1>Create new Categorie</h1>
+<div class="container my-5">
+    <div class="row justify-content-center">
+         <div class="col-md-10 col-lg-8">
+            <div class="card shadow-lg border-0">              
+                <div class="card-header bg-gradient-primary bg-primary text-white text-center">
+                    <h3 class="mb-0">
+                        <i class="bi bi-folder-plus me-2"></i>Créer une nouvelle catégorie
+                    </h3>
+                </div>
 
-    {{ include('categorie/_form.html.twig') }}
+                <div class="card-body p-4">
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 
-    <a href="{{ path('app_categorie_index') }}">back to list</a>
+                    <div class="form-group mb-3">
+                        {{ form_label(form.nom, 'Nom de la catégorie', {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                        {{ form_widget(form.nom, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Entrez une categgorie'}}) }}
+                        {{ form_errors(form.nom) }}
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-success px-5">
+                            {{ button_label|default('Enregistrer') }}
+                        </button>
+                    </div>
+
+                    {{ form_end(form) }}
+                </div>
+
+                <div class="card-footer bg-light text-center py-3 rounded-bottom-4">
+                    <a href="{{ path('app_categorie_index') }}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left-circle"></i> Retour à la liste des catégories
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

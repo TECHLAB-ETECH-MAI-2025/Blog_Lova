@@ -1,0 +1,120 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1 class="mb-5 text-center text-primary fw-bold" style="text-shadow: 1px 1px 2px #6c757d;">Mon Blog</h1>
+
+    <div class="card mb-5 shadow-lg rounded-4 border-0">
+        <div class="card-header bg-primary text-white rounded-top-4 shadow-sm d-flex align-items-center" style="background: linear-gradient(90deg, #0d6efd, #6610f2); padding: 1rem 1.5rem; border-bottom: 4px solid #0b5ed7;">
+            <h4 class="mb-0 fw-bold" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.2); letter-spacing: 0.5px;">Ajouter un nouvel article</h4>
+        </div>
+
+        <div class="card-body bg-light p-4">
+            {{ form_start(articleForm) }}
+
+            <div class="mb-3">
+                {{ form_label(articleForm.titre) }}
+                {{ form_widget(articleForm.titre, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(articleForm.titre) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(articleForm.contenu) }}
+                {{ form_widget(articleForm.contenu, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(articleForm.contenu) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(articleForm.Categorie) }}
+                {{ form_widget(articleForm.Categorie, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(articleForm.Categorie) }}
+            </div>
+
+            <button type="submit" class="btn btn-primary">Ajouter</button>
+            {{ form_end(articleForm) }}
+        </div>
+    </div>
+
+    {% for article in articles %}
+        <div class="card mb-4 shadow-sm rounded-4 border-primary border-2">
+            <div class="card-body">
+                <h3 class="card-title text-primary fw-semibold mb-3">{{ article.titre }}</h3>
+                <p class="card-text fs-5">{{ article.contenu }}</p>
+
+                <p class="text-muted fst-italic small">
+                    <strong>Catégories:</strong>
+                    {% for cat in article.Categorie %}
+                        <span class="badge bg-secondary me-1">{{ cat.nom }}</span>
+                    {% endfor %}
+                </p>
+                <button
+                    class="btn btn-outline-danger like-button mb-3"
+                    data-article-id="{{ article.id }}"
+                >
+                    ❤️ <span class="like-count">{{ article.likes|length }}</span>
+                </button>
+
+                <h5 class="mt-4 mb-3 border-bottom pb-2">Commentaires</h5>
+                {% for commentaire in article.commentaires %}
+                    <div class="alert alert-light border border-secondary rounded-3 shadow-sm mb-3">
+                        <strong class="text-primary d-block">{{ commentaire.auteur }}</strong>
+                        <span>{{ commentaire.contenu }}</span>
+                    </div>
+                {% endfor %}
+
+                <div class="mt-4 p-3 border rounded bg-light">
+                    <h6 class="mb-3 text-primary">Ajouter un commentaire :</h6>
+                    {{ form_start(commentForms[article.id]) }}
+
+                    <div class="mb-3">
+                        {{ form_label(commentForms[article.id].contenu) }}
+                        {{ form_widget(commentForms[article.id].contenu, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(commentForms[article.id].contenu) }}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Commenter</button>
+                    {{ form_end(commentForms[article.id]) }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.like-button').forEach(button => {
+                button.addEventListener('click', async (e) => {
+                    const articleId = button.dataset.articleId;
+
+                    const response = await fetch(`/article/${articleId}/like`, {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        console.error('Erreur lors de la requête Ajax.');
+                        return;
+                    }
+
+                    const data = await response.json();
+
+                    // Mettre à jour le compteur
+                    const likeCountSpan = button.querySelector('.like-count');
+                    likeCountSpan.textContent = data.likesCount;
+
+                    // Changer la couleur du bouton
+                    if (data.liked) {
+                        button.classList.remove('btn-outline-danger');
+                        button.classList.add('btn-danger');
+                    } else {
+                        button.classList.remove('btn-danger');
+                        button.classList.add('btn-outline-danger');
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

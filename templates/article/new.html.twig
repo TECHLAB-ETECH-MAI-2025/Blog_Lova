@@ -1,11 +1,60 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Article{% endblock %}
+{% block title %}Créer un nouvel article{% endblock %}
 
 {% block body %}
-    <h1>Create new Article</h1>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
 
-    {{ include('article/_form.html.twig') }}
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-gradient-primary bg-primary text-white text-center">
+                    <h3 class="mb-0">Créer un nouvel article </h3>
+                </div>
 
-    <a href="{{ path('app_article_index') }}">back to list</a>
+                <div class="card-body p-4">
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+                    {#Titre#}
+                    <div class="mb-3">
+                        {{ form_label(form.titre, 'Titre', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                        {{ form_widget(form.titre, {'attr': {'class': 'form-control', 'placeholder': 'Entrez votre nom'}}) }}
+                        {{ form_errors(form.titre) }}
+                    </div>
+
+                    {# Contenu #}
+                    <div class="mb-3">
+                        {{ form_label(form.contenu, 'Contenu', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                        {{ form_widget(form.contenu, {'attr': {'class': 'form-control', 'placeholder': 'Écrivez le contenu de l’article', 'rows': 6}}) }}
+                        {{ form_errors(form.contenu) }}
+                    </div>
+
+                    {# Catégories #}
+                    <div class="mb-3">
+                        {{ form_label(form.Categorie, 'Catégories', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                        {{ form_widget(form.Categorie, {'attr': {'class': 'form-select'}}) }}
+                        {{ form_errors(form.Categorie) }}
+                    </div>
+
+                    <div class="text-center">
+                        <button class="btn btn-success px-5">
+                            {{ button_label|default('Enregistrer') }}
+                        </button>
+                    </div>
+
+                    {{ form_end(form) }}
+                </div>
+
+                <div class="card-footer bg-light text-center">
+                    <a href="{{ path('app_article_index') }}" class="btn btn-outline-primary">
+                        ⬅️ Retour à la liste des articles
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
 {% endblock %}
+
+
