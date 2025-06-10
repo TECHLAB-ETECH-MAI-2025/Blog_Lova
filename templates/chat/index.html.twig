@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chat avec {{ receiver.nom }}{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Discussion avec {{ receiver.nom }}</h4>
+        </div>
+
+        <div id="chat-box"
+             class="card-body"
+             style="max-height: 800px; overflow-y: auto;"
+             data-user-id="{{ app.user.id }}"
+             data-receiver-id="{{ receiver.id }}">
+            {% for message in messages %}
+                <div class="mb-3">
+                    <div class="d-flex {{ message.sender == app.user ? 'justify-content-end' : 'justify-content-start' }}">
+                        <div class="p-2 rounded shadow-sm 
+                            {{ message.sender == app.user ? 'bg-primary text-white' : 'bg-light text-dark' }}" 
+                            style="display: inline-block; max-width: 90%; word-break: break-word; overflow-wrap: break-word; white-space: normal;">
+
+                            <strong style="white-space: nowrap;">{{ message.sender == app.user ? 'Moi' : message.sender.nom }}</strong><br>
+                            {{ message.content }}
+                            <div class="text-muted small text-end mt-1">{{ message.createdAt|date('d/m/Y H:i') }}</div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <p class="text-muted">Aucun message pour l’instant.</p>
+            {% endfor %}
+        </div>
+
+        <div class="card-footer">
+            {{ form_start(form) }}
+                <div class="input-group">
+                    {{ form_widget(form.content, {
+                        'attr': {
+                            'class': 'form-control',
+                            'placeholder': 'Écris ton message...',
+                            'id': 'message-input'    
+                        }
+                    }) }}
+                    <button class="btn btn-primary" type="submit" id="send-btn">Envoyer</button> 
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

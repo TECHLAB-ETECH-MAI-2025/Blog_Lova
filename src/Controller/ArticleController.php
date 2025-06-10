@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Form\CommentaireType;
+use App\Entity\Commentaire;
 
 #[Route('/article')]
 class ArticleController extends AbstractController
@@ -22,7 +24,50 @@ class ArticleController extends AbstractController
 
         return $this->render('article/index.html.twig', [
             'articles' => $articles,
+            // On ne crée plus ici de formulaire, on fait ça dans Twig via un render partial (optionnel)
         ]);
+    }
+
+    #[Route('/{id}/comment', name: 'app_article_comment_new', methods: ['POST'])]
+    public function newComment(Request $request, Article $article, EntityManagerInterface $entityManager): Response
+    {
+        $commentaire = new Commentaire();
+        $commentaire->setArticle($article);
+        $commentaire->setAuteur($this->getUser());
+
+        $form = $this->createForm(CommentaireType::class, $commentaire);
+        $form->handleRequest($request);
+
+        if ($request->isXmlHttpRequest()) {
+            if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager->persist($commentaire);
+                $entityManager->flush();
+
+                return $this->json([
+                    'success' => true,
+                    'commentaire' => [
+                        'auteur' => $commentaire->getAuteur()->getNom(), // adapte selon ta méthode
+                        'contenu' => $commentaire->getContenu(),
+                    ],
+                ]);
+            }
+
+            return $this->json([
+                'success' => false,
+                'message' => 'Formulaire invalide'
+            ], 400);
+        }
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($commentaire);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Votre commentaire a été ajouté.');
+        } else {
+            $this->addFlash('error', 'Erreur lors de l\'ajout du commentaire.');
+        }
+
+        return $this->redirectToRoute('app_article_index');
     }
 
     #[Route('/new', name: 'app_article_new', methods: ['GET', 'POST'])]
@@ -34,7 +79,8 @@ class ArticleController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $article->setCreatedAt(new \DateTimeImmutable());
-            $article->setAuteur($this->getUser()); // Si authentification
+            $article->setAuteur($this->getUser());
+
             $entityManager->persist($article);
             $entityManager->flush();
 
@@ -62,6 +108,10 @@ class ArticleController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if ($article->getAuteur() === null && $this->getUser()) {
+                $article->setAuteur($this->getUser());
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_article_index');

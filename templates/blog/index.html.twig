@@ -34,6 +34,11 @@
         </div>
     </div>
 
+    <div class="mb-4">
+        <h2 class="text-primary fw-bold">Articles publiés</h2>
+        <hr class="mb-3">
+    </div>
+
     {% for article in articles %}
         <div class="card mb-4 shadow-sm rounded-4 border-primary border-2">
             <div class="card-body">
@@ -63,7 +68,13 @@
 
                 <div class="mt-4 p-3 border rounded bg-light">
                     <h6 class="mb-3 text-primary">Ajouter un commentaire :</h6>
-                    {{ form_start(commentForms[article.id]) }}
+                       {{ form_start(commentForms[article.id], {
+                          'attr': {'class': 'comment-form', 'data-article-id': article.id},
+                         'action': path('app_article_comment_new', {'id': article.id}),
+                          'method': 'POST'
+                           })     
+                        }}
+
 
                     <div class="mb-3">
                         {{ form_label(commentForms[article.id].contenu) }}

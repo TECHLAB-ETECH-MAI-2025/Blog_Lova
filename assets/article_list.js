@@ -4,22 +4,21 @@ import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 
 $(document).ready(function () {
     $('#article-table').DataTable({
-        ajax: '/article/ajax/list',
-        columns: [
-            { data: 'id' },
-            { data: 'titre' },
-            { data: 'contenu' },
-            { data: 'auteur' },
-            { data: 'date' },
-            {
-                data: 'actions',
-                orderable: false,
-                searchable: false,
-                render: function (data, type, row) {
-                    return data;  // ici on affiche le HTML généré par Twig côté serveur
-                }
-            }
-        ]
+       // ajax: '/article/ajax/list',
+       // columns: [
+        //    { data: 'id' },
+        //    { data: 'titre' },
+         //   { data: 'contenu' },
+        //    { data: 'auteur' },
+         //   { data: 'date' },
+         //   {
+         //       data: 'actions',
+         //       orderable: false,
+          //      searchable: false,
+          //      render: function (data, type, row) {
+           ////   }
+          //  }
+       // ]
     });
 });
 $(document).on('click', '.btn-like', function() {

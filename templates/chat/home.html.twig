@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Choisir un utilisateur{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">Choisissez un utilisateur pour discuter</h1>
+
+    <div class="row">
+        {% for user in users %}
+            {% if user != app.user %}
+                <div class="col-md-4 mb-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ user.nom }}</h5>
+                            <a href="{{ path('app_chat', {'id': user.id}) }}" class="btn btn-outline-primary">Discuter</a>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% else %}
+            <p>Aucun autre utilisateur trouvé.</p>
+        {% endfor %}
+    </div>
+{% endblock %}
