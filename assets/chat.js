@@ -16,8 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
               <div>
                 <div class="text-muted small text-${align} mb-1">${message.createdAt}</div>
                 <div class="p-2 rounded shadow-sm ${bgClass}" style="display: inline-block; max-width: 90%; word-break: break-word; overflow-wrap: break-word; white-space: normal;">
-
-
                     <strong>${senderName}</strong><br>
                     ${message.content}
                 </div>

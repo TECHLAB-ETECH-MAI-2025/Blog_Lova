@@ -154,4 +154,20 @@ class ChatController extends AbstractController
      ]);
 
     }
+    /**
+ * @Route("/api/current-user", name="api_current_user", methods={"GET"})
+ */
+public function currentUser(): JsonResponse
+{
+    $user = $this->getUser();
+    if (!$user) {
+        return new JsonResponse(null, 401);
+    }
+
+    return new JsonResponse([
+        'id' => $user->getId(),
+        'name' => $user->getNom(),
+    ]);
+}
+
 }
